@@ -1,11 +1,18 @@
 <resources>
-    <string name="app_name">RandomBitmap</string>
+    <string name="app_name">Bitmaphony</string>
+    <string name="use_notes">Use notes</string>
     <string-array name="instruments">
+        <item>Bit</item>
         <item>Bell</item>
         <item>Flute</item>
         <item>Guitar</item>
         <item>Bass</item>
+        <item>Hat</item>
+        <item>Iron_xylophone</item>
         <item>Harp</item>
+        <item>Pling</item>
+        <item>Snare</item>
         <item>Xylobone</item>
+        <item>Banjo</item>
     </string-array>
 </resources>

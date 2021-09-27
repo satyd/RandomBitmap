@@ -1,14 +1,18 @@
 package com.levp.randombitmap
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.os.Build
 import android.os.Bundle
-import android.os.Looper
+import android.os.IBinder
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
@@ -23,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import java.io.IOException
 import java.lang.reflect.Field
 import java.util.*
 import kotlin.math.roundToInt
@@ -30,6 +35,9 @@ import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val Broadcast_PLAY_NEW_AUDIO = "com.levp.randombitmap.audioplayer.PlayNewAudio"
+    }
     val colorCount = 256 * 256 * 256
     var screenWidth: Int = 1000
     var screenHeight: Int = 1000
@@ -38,12 +46,14 @@ class MainActivity : AppCompatActivity() {
     var currBitmap: Bitmap? = null
 
     private var viewModelJob = Job()
-    private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private var jobList = ArrayList<Job>()
+    private var uiScope = CoroutineScope(Dispatchers.Main)
 
-    var timesASec = 2.0f
+
     var minTimesASec = 2.0f
     var isPlaying = true
     var instrumentStr: String = "bell"
+    var playingNotesOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,28 +62,39 @@ class MainActivity : AppCompatActivity() {
         screenWidth = getRealScreenSize().first
         screenHeight = getRealScreenSize().second
 
+
         buttonGenerate.setOnClickListener {
-            val height = imageHeightTextView.text.toString().toIntOrNull() ?: 5
-            val width = imageWidthTextView.text.toString().toIntOrNull() ?: 5
+            val height = imageHeightTextView.text.toString().toIntOrNull() ?: 9
+            val width = imageWidthTextView.text.toString().toIntOrNull() ?: 9
             generateImage(height, width)
         }
 
+
         buttonPlay.setOnClickListener {
+            currBitmap?.let { jobList.add(playImage(it)) }
 
-            currBitmap?.let { playImage(it) }
         }
-        buttonStop.setOnClickListener {
-            CoroutineScope(Dispatchers.Default).launch{
-                viewModelJob.cancelAndJoin()
-                isPlaying = false
-                delay((1000L / minTimesASec).toLong())
-                isPlaying = true
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@MainActivity, "playing stopped", Toast.LENGTH_SHORT).show()
-                }
 
-                //viewModelJob.complete()
+
+        areNotesOn.setOnCheckedChangeListener { _ , isChecked ->
+            playingNotesOn = if(isChecked) {
+                true
+            } else{
+                true
             }
+        }
+
+        buttonStop.setOnClickListener {
+            if(jobList.size > 0)
+            {
+                uiScope.cancel()
+                jobList.clear()
+                uiScope = CoroutineScope(Dispatchers.Main)
+                currentColor.setBackgroundColor(0)
+
+                colorCodeTW.text = "current color:\n"
+            }
+
 
         }
         val spinner = findViewById<Spinner>(R.id.pickInstrumentSpinner)
@@ -124,19 +145,15 @@ class MainActivity : AppCompatActivity() {
             Bitmap.createScaledBitmap(it, resWidth.roundToInt(), resHeight.roundToInt(), false)
         }
 
-
         imageView.setImageBitmap(resBitmap)
-
     }
 
     fun randPix(): Int {
-        val logger = Random.nextInt(256)
-        return logger
+        return Random.nextInt(256)
     }
 
     fun darkAlpha(): Int {
-        val logger = Random.nextInt(192) + 64
-        return logger
+        return Random.nextInt(192) + 64
     }
 
     private fun processingBitmap(src: Bitmap): Bitmap? {
@@ -163,7 +180,7 @@ class MainActivity : AppCompatActivity() {
         return dest
     }
 
-    fun getRealScreenSize(): Pair<Int, Int> { //<width, height>
+    private fun getRealScreenSize(): Pair<Int, Int> { //<width, height>
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val size = Point()
             display?.getRealSize(size)
@@ -172,11 +189,10 @@ class MainActivity : AppCompatActivity() {
             val size = Point()
             windowManager.defaultDisplay.getRealSize(size)
             Pair(size.x, size.y)
-
         }
     }
 
-    fun getResId(resName: String, c: Class<*>): Int {
+    private fun getResId(resName: String, c: Class<*>): Int {
         return try {
             val idField: Field = c.getDeclaredField(resName)
             idField.getInt(idField)
@@ -186,81 +202,76 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setInstrument(string: String): Int {
-        MainActivity::class.java.getResource("/res/raw/$string.wav")
-        when (string) {
-            "Bell" -> {
-                return R.raw.bell
+    private fun playImage(bitmap: Bitmap) : Job {
+        return uiScope.launch {
+
+            val instrumentId = getResId(instrumentStr, R.raw::class.java)
+            val h = bitmap.height
+            val w = bitmap.width
+            var timesASec = frequencyEditText.text.toString().toFloatOrNull() ?: 2f
+
+            if(timesASec < 0.1)
+            {
+                timesASec = 0.1f
+                Toast.makeText(this@MainActivity, "that's too slow...", Toast.LENGTH_SHORT).show()
             }
-        }
-        return -1
-    }
 
-    fun playImage(bitmap: Bitmap) {
-        val instrumentId = getResId(instrumentStr, R.raw::class.java)
-        val h = bitmap.height
-        val w = bitmap.width
-        timesASec = frequencyEditText.text.toString().toFloatOrNull() ?: 2.0f
-        if(minTimesASec > timesASec)
-            minTimesASec = timesASec
-        val bitRate = 1000f / timesASec
-        var factor = 1f
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val bitRate = 1000f / (timesASec ?: 1f)
+            var factor = 1f
 
-            viewModelJob = Job(uiScope.launch {
-                withContext(Dispatchers.IO) {
-                    //Do background tasks...
+            val playingNotes = playingNotesOn
 
-                    for (y in 0 until h) {
-                        for (x in 0 until w) {
-                            if(!isPlaying)
-                                break
-                            //val bells = MediaPlayer.create(this@MainActivity, R.raw.bell)
-                            val bells = MediaPlayer.create(this@MainActivity, instrumentId)
-                            factor = bells.duration / bitRate
-                            val pixel = bitmap.getPixel(x, y)
-                            val alpha = pixel.alpha.toFloat()
-                            bells.setVolume(alpha / 256f, alpha / 256f)
+            withContext(Dispatchers.IO) {
 
-                            //bells.setVolume(pixel.alpha.toFloat() / 256, pixel.alpha.toFloat() / 256)
-                            var value = pixel.red + pixel.green + pixel.blue
+                for (y in 0 until h) {
+                    for (x in 0 until w) {
+                        if (!isActive)
+                            break
+                        val sound = MediaPlayer.create(this@MainActivity, instrumentId)
+                        val pixel = bitmap.getPixel(x, y)
+                        factor = sound.duration / bitRate
+
+                        val alpha = pixel.alpha.toFloat()
+                        sound.setVolume(alpha / 256f, alpha / 256f)
+
+                        val value = pixel.red + pixel.green + pixel.blue
 
 
-                            val params: PlaybackParams = PlaybackParams()
-                            params.pitch = (value.toFloat() / 382f + 0.2f)
-                            params.speed = factor
-                            bells.playbackParams = params
-                            //bells.playbackParams.pitch = (blue.toFloat())
-
-                            bells.start()
-                            val playDuration = (bells.duration.toLong() / factor).toLong()
-                            withContext(Dispatchers.Main) {
-                                currentColor.setBackgroundColor(pixel)
-
-                                val alph = pixel.alpha.toString(16)
-                                val red = pixel.red.toString(16)
-                                val green = pixel.green.toString(16)
-                                val blue = pixel.blue.toString(16)
-
-                                colorCodeTW.text = "current color:\n#$alph $red $green $blue"
-
-                            }
-                            delay(playDuration)
-
-                            //Log.d("sound", "run #${y * h + x + 1} : ${params.pitch}")
-                            bells.stop()
-                            bells.reset()
-                            bells.release()
-
-                            if(!isPlaying)
-                                break
+                        val params: PlaybackParams = PlaybackParams()
+                        if(playingNotes)
+                        {
+                            params.pitch = Notes.getNote(value.toFloat() / 382f + 0.2f)
                         }
+                        else{
+                            params.pitch = (value.toFloat() / 382f + 0.2f)
+                        }
+
+                        params.speed = factor
+
+                        sound.playbackParams = params
+                        sound.start()
+
+                        val playDuration = (sound.duration.toLong() / factor).toLong()
+
+                        withContext(Dispatchers.Main) {
+                            currentColor.setBackgroundColor(pixel)
+
+                            val alph = pixel.alpha.toString(16)
+                            val red = pixel.red.toString(16)
+                            val green = pixel.green.toString(16)
+                            val blue = pixel.blue.toString(16)
+
+                            colorCodeTW.text = "current color:\n#$alph $red $green $blue"
+
+                        }
+                        Log.d("sound", "run #${y * h + x + 1} : ${params.pitch}")
+                        delay(playDuration)
+                        sound.stop()
+                        sound.reset()
 
                     }
                 }
-            })
-
-
+            };
         }
     }
 
