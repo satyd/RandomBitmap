@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Bitmaphony</string>
     <string name="use_notes">Use notes</string>
+    <string name="widthEdTxt">width</string>
+    <string name="heightEdTxt">height</string>
+    <string name="current_color_nTxtVw">current color:\n</string>
+    <string name="notes_a_secEdTxt">notes a sec</string>
+    <string name="generateBtnText">generate</string>
+    <string name="playBtnText">play</string>
+    <string name="stopBtnText">stop</string>
     <string-array name="instruments">
         <item>Bit</item>
         <item>Bell</item>
@@ -14,5 +21,12 @@
         <item>Snare</item>
         <item>Xylobone</item>
         <item>Banjo</item>
+        <item>Cow_Bell</item>
+        <item>Icechime</item>
+        <item>Didgeridoo</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="put_a_link_text">insert a link</string>
+    <string name="download_btn_text">download</string>
 </resources>

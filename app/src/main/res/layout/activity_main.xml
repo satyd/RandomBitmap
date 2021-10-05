@@ -4,145 +4,182 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_marginStart="20dp"
-        android:id="@+id/useNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/use_notes"
 
-        app:layout_constraintBottom_toBottomOf="@+id/areNotesOn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/areNotesOn" />
+    <FrameLayout
+        android:id="@+id/main_frag_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:layout_marginEnd="15dp"
-        android:id="@+id/areNotesOn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageWidthTextView"
-
-        app:layout_constraintEnd_toStartOf="@+id/imageWidthTextView"
-        app:layout_constraintStart_toEndOf="@+id/useNotes"
-        app:layout_constraintTop_toTopOf="@+id/imageWidthTextView" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintBottom_toTopOf="@+id/imageWidthTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
 
-    <EditText
-        android:id="@+id/imageWidthTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:autofillHints="500"
-        android:hint="image width"
-        android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/imageHeightTextView"
-        app:layout_constraintEnd_toEndOf="@+id/buttonGenerate"
+    <!--        android:padding="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="0.12" />-->
 
-        app:layout_constraintHorizontal_bias="0.5"
 
-        app:layout_constraintStart_toStartOf="@+id/buttonGenerate"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+    <!--    <EditText-->
+    <!--        android:id="@+id/imageWidthTextView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:autofillHints="500"-->
+    <!--        android:hint="@string/widthEdTxt"-->
 
-    <EditText
-        android:id="@+id/imageHeightTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:autofillHints="500"
-        android:hint="image height"
+    <!--        android:inputType="number"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/colorCodeTW"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/imageHeightTextView"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/colorCodeTW"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/colorCodeTW"-->
+    <!--        app:layout_constraintVertical_bias="0.6" />-->
 
-        android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/buttonGenerate"
-        app:layout_constraintEnd_toEndOf="@+id/imageWidthTextView"
+    <!--    <EditText-->
+    <!--        android:id="@+id/imageHeightTextView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:autofillHints="500"-->
+    <!--        android:hint="@string/heightEdTxt"-->
 
-        app:layout_constraintStart_toStartOf="@+id/imageWidthTextView" />
+    <!--        android:inputType="number"-->
 
-    <TextView
-        android:id="@+id/colorCodeTW"
-        android:text="current color:\n"
-        android:textAlignment="center"
-        android:layout_width="wrap_content"
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/imageWidthTextView"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/buttonGenerate"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/imageWidthTextView"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/imageWidthTextView"-->
+    <!--        app:layout_constraintVertical_bias="0.65" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/colorCodeTW"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/current_color_nTxtVw"-->
+    <!--        android:textAlignment="center"-->
+
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.05"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintRight_toRightOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="0.7" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/currentColor"-->
+    <!--        android:layout_width="50dp"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.05"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/colorCodeTW" />-->
+    <!--    <Button-->
+
+    <!--        android:id="@+id/buttonGenerate"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:text="@string/generateBtnText"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/imageHeightTextView"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/imageHeightTextView"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/imageHeightTextView" />-->
+
+
+    <include
+
+        android:id="@+id/controls"
+        layout="@layout/play_controls"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/currentColor"
-        app:layout_constraintEnd_toStartOf="@+id/buttonGenerate"
-        app:layout_constraintStart_toStartOf="parent" />
-    <ImageView
-        android:id="@+id/currentColor"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/frequencyEditText"
-        app:layout_constraintEnd_toStartOf="@+id/buttonGenerate"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/frequencyEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:autofillHints="500"
-        android:hint="notes a sec"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toStartOf="@+id/buttonPlay"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/buttonPlay" />
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintTop_toBottomOf="@+id/main_frag_container" />
 
-    <Button
+    <!--    <EditText-->
+    <!--        android:id="@+id/frequencyEditText"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:autofillHints="500"-->
+    <!--        android:hint="@string/notes_a_secEdTxt"-->
+    <!--        android:inputType="numberDecimal"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/buttonPlay"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/buttonPlay"-->
+    <!--        app:layout_constraintHorizontal_bias="0.1"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/buttonPlay"-->
+    <!--        app:layout_constraintVertical_bias="0.9" />-->
 
-        android:id="@+id/buttonGenerate"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="72dp"
-        android:text="generate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageWidthTextView" />
 
-    <Button
+    <!--    <Button-->
 
-        android:id="@+id/buttonPlay"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="40dp"
-        android:text="play"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGenerate" />
+    <!--        android:id="@+id/buttonPlay"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:text="@string/playBtnText"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/buttonStop"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/buttonStop"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/frequencyEditText"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/buttonStop" />-->
 
-    <Button
+    <!--    <Button-->
 
-        android:id="@+id/buttonStop"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+    <!--        android:id="@+id/buttonStop"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="50dp"-->
 
-        android:text="stop"
-        app:layout_constraintBottom_toBottomOf="@id/buttonPlay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonPlay"
-        app:layout_constraintTop_toTopOf="@+id/buttonPlay" />
+    <!--        android:text="@string/stopBtnText"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/buttonPlay"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="0.93" />-->
 
-    <Spinner
-        android:padding="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:id="@+id/pickInstrumentSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/instruments"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/imageWidthTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonGenerate" />
+    <!--    <Spinner-->
+    <!--        android:id="@+id/pickInstrumentSpinner"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+
+    <!--        android:layout_marginTop="32dp"-->
+    <!--        android:entries="@array/instruments"-->
+    <!--        android:padding="10dp"-->
+    <!--        android:textAlignment="center"-->
+
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/colorCodeTW" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/useNotes"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="8dp"-->
+
+    <!--        android:text="@string/use_notes"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/pickInstrumentSpinner"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/pickInstrumentSpinner"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/buttonGenerate" />-->
+
+    <!--    <androidx.appcompat.widget.SwitchCompat-->
+    <!--        android:id="@+id/areNotesOn"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        android:checked="true"-->
+
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/pickInstrumentSpinner"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/pickInstrumentSpinner"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/pickInstrumentSpinner" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <Spinner
+        android:id="@+id/pickInstrumentSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:entries="@array/instruments"
+        android:padding="10dp"
+        android:textAlignment="center"
+
+        app:layout_constraintEnd_toEndOf="@+id/buttonStop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+
+        app:layout_constraintBottom_toBottomOf="@+id/pickInstrumentSpinner"
+        app:layout_constraintStart_toStartOf="@+id/frequencyEditText"
+        app:layout_constraintTop_toTopOf="@+id/pickInstrumentSpinner"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/useNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-5dp"
+            android:text="@string/use_notes"
+            app:layout_constraintBottom_toBottomOf="@+id/pickInstrumentSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pickInstrumentSpinner" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/areNotesOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:checked="true"
+            app:layout_constraintBottom_toBottomOf="@+id/pickInstrumentSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pickInstrumentSpinner"
+            app:layout_constraintTop_toTopOf="@+id/pickInstrumentSpinner" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/frequencyEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:autofillHints="500"
+        android:hint="@string/notes_a_secEdTxt"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonPlay"
+        app:layout_constraintEnd_toStartOf="@+id/buttonPlay"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonPlay"
+        app:layout_constraintVertical_bias="0.9" />
+
+
+    <Button
+
+        android:id="@+id/buttonPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="@string/playBtnText"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonStop"
+        app:layout_constraintEnd_toStartOf="@+id/buttonStop"
+
+        app:layout_constraintStart_toEndOf="@+id/frequencyEditText"
+        app:layout_constraintTop_toTopOf="@+id/buttonStop" />
+
+    <Button
+
+        android:id="@+id/buttonStop"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/stopBtnText"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonPlay"
+        app:layout_constraintTop_toBottomOf="@+id/pickInstrumentSpinner" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
